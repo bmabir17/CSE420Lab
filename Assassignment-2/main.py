@@ -16,7 +16,6 @@ def removeSpace():
         ##print ('line1')
         for char in line:
             ##print (char)
-            
             if(char==' ' or char=='\n' or char==',' or char==';'):
                 ##print(tempWord)
                 tempWord=tempWord.strip()
@@ -46,21 +45,23 @@ def findIdentity():
         ##print(count)
         ##print(temp_identity)
         identity_list.append(temp_identity)
-        print(identity_list[count])
+        #print(identity_list[count])
         c+=1
         identity_val.append(int(line[c:]))
-        print(identity_val[count])
+        #print(identity_val[count])
         count+=1
 
     parseLimit=int(word_list[limit+1])
     print("Parse Limit",parseLimit)
     parseCount=0
+    
     while(parseCount<=parseLimit):
+        output_list=[]
+        parC=0
         line=word_list[limit+1+parseCount]
         print("This is the parse ",line)
         line_len=len(line)
         c=0
-
         ##1)  Examine the next element in the input.
         ##2)  If it is operand, output it.
         ##3)  If it is opening parenthesis, push it on stack.
@@ -75,41 +76,46 @@ def findIdentity():
         ##7)  If there is no more input, pop the remaining operators to output.
 
         while((c<line_len)):
-            try:            ##if identity found
+            try:            ##if identity(operand or variable) found
                 ind=identity_list.index(line[c])
-                print(line[c]," index:",ind)
                 output_list.append(identity_val[ind]) ##Add the value of the identity as the operend to output
             except ValueError:  ##if no identity is found
                 try:            ## else if operator is found
-                    loopFlag=True
-                    while(loopFlag):
+                    while(True):
                         ind=operator_list.index(line[c])
-                        print(line[c]," index:",ind)
+                        #print(line[c]," index:",ind)
                         if(stack==[]):              ##if stack is empty
                             stack.append(line[c])   ##push operator to stack
-                            loopFlag=True
+                            break
                         elif(stack[-1]=='('):       ##if stack top has a '('
                             stack.append(line[c])   ##push operator to stack
-                            loopFlag=True
+                            break
                         elif(ind>operator_list.index(stack[-1])):
                             stack.append(line[c])   ##push operator to stack
-                            loopFlag=True
+                            break
                         else:
                             output_list.append(stack.pop())
-                            loopFlag=False                      
                 except ValueError:
                     if(line[c]=='('):           ##push '(' to stack
                         stack.append(line[c])
+                        parC+=1
+                        #print("stack change 7", stack)
                     elif(line[c]==')'):
+                        parC-=1
                         temp=stack.pop()        ##pop from stack as a ')' is found
-                        output_list.append(temp)
                         while((temp!='(') and (stack!=[])):       ##pop from stack untill a '(' is found
-                            temp=stack.pop()
                             output_list.append(temp)
+                            temp=stack.pop()
             c+=1
         while(stack!=[]):
             output_list.append(stack.pop())
         parseCount+=1
+        print("output ",output_list)
+        if(parC<0):
+            print("Parenthesis Error")
+        
 removeSpace()
 findIdentity()
-print("output",output_list)
+
+#print('stack:',stack)
+#print('output',output_list)
