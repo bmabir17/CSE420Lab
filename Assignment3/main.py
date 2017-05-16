@@ -1,7 +1,7 @@
 inFile= open('input.txt', 'r')
 import re
 rule=[]
-re=[]
+reg=[]
 word_list=[]
 def removeSpace():
     tempWord=' '
@@ -17,7 +17,7 @@ def removeSpace():
                 tempWord=tempWord.strip()
                 tempWord=tempWord.strip('\n')
                 word_list.insert(len(word_list),tempWord)
-                ##print('word_list',word_list)
+                print('word_list',word_list)
                 tempWord=' '
 
                 
@@ -37,14 +37,21 @@ def checkRE():
         print("rule",rule)
     string_count=0
     string_limit=int(word_list[rule_limit+1])
+    ##print(string_limit);
     while(string_count<string_limit):
-        re.insert(string_count,word_list[rule_limit+string_count+1])
+        tempString=word_list[rule_limit+string_count+1]
+        reg.insert(string_count,tempString)
+        ruleCount=0
+        while(ruleCount<rule_limit):
+            tempRule=rule[ruleCount]
+            print(tempRule)
         string_count+=1
     print("rule",rule)
-    print("String",re)
-    regex=r"a{1}b*c*d{1}"
-    if re.search(regex, "acccd"):
-        match=re.search(regex,"acccd")
+    print("String",reg)
+    
+    regex="a{1}b*c*d{1}"
+    if re.search(regex, "accccd"):
+        match=re.match(regex,"accccd")
         print ("Match at index %s, %s" % (match.start(),match.end()))
     
 removeSpace()
